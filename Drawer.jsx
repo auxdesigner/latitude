@@ -9,7 +9,7 @@ import {StyleSheet, css} from "aphrodite";
 import {CSSTransition} from "react-transition-group";
 import IconButton from "./button/IconButton";
 import Text from "./Text";
-import Group from "./Group";
+
 import Portal from "./Portal";
 import {zIndices} from "./tools/zIndices";
 import colors from "./colors";
@@ -50,49 +50,47 @@ function Drawer({
   }
 
   const styles = getStyles(width);
+
   return (
     <Portal>
-      <div className={css(styles.drawerWrapper)}>
-        <div className={css(styles.transitionGroup)}>
-          <CSSTransition
-            in={isOpen}
-            classNames={{
-              enter: css(styles.drawerEnter),
-              enterActive: css(styles.drawerEnterActive),
-              exit: css(styles.drawerExit),
-              exitActive: css(styles.drawerExitActive),
+      <div className={css(styles.drawerWrapper, styles.transitionGroup)}>
+        <CSSTransition
+          in={isOpen}
+          classNames={{
+            enter: css(styles.drawerEnter),
+            enterActive: css(styles.drawerEnterActive),
+            exit: css(styles.drawerExit),
+            exitActive: css(styles.drawerExitActive),
+          }}
+          timeout={{
+            enter: TRANSITION_DELAY,
+            exit: TRANSITION_DELAY,
+          }}
+          mountOnEnter={true}
+          unmountOnExit={true}
+        >
+          <div
+            className={css(styles.container)}
+            style={{
+              top: navOffset,
+              height: `calc(100vh - ${navOffset}px)`,
             }}
-            timeout={{
-              enter: TRANSITION_DELAY,
-              exit: TRANSITION_DELAY,
-            }}
-            mountOnEnter={true}
-            unmountOnExit={true}
           >
-            <div
-              className={css(styles.container)}
-              style={{
-                top: navOffset,
-                height: `calc(100vh - ${navOffset}px)`,
-              }}
-            >
-              <div className={css(styles.header)}>
-                <Group flexDirection="row" gap={12} alignItems="center">
-                  <IconButton
-                    iconName="cancel"
-                    size="l"
-                    onClick={onClose}
-                    intent="none"
-                    kind="blank"
-                    type="button"
-                  />
-                  {title ? <Text weight="bold">{title}</Text> : null}
-                </Group>
-              </div>
-              <div className={css(styles.body)}>{children}</div>
+            <div className={css(styles.header)}>
+              <Text scale="headline" weight="bold">
+                {title}
+              </Text>
+              <IconButton
+                iconName="cancel"
+                intent="none"
+                kind="hollow"
+                type="button"
+                onClick={onClose}
+              />
             </div>
-          </CSSTransition>
-        </div>
+            <div className={css(styles.body)}>{children}</div>
+          </div>
+        </CSSTransition>
       </div>
     </Portal>
   );
@@ -110,20 +108,21 @@ function getStyles(width: $Keys<typeof DRAWER_WIDTHS>) {
     container: {
       width: `${DRAWER_WIDTHS[width]}px`,
       position: "fixed",
-      backgroundColor: colors.white,
-      boxShadow: "-8px 0px 16px rgba(0, 0, 0, 0.2)",
+      backgroundColor: colors.grey10,
+      boxShadow: "0 0 20px rgba(57, 65, 77, 0.15)",
       pointerEvents: "all",
       zIndex: zIndices.zIndexPageOverlay.value,
       display: "flex",
       flexDirection: "column",
     },
     header: {
-      padding: "12px",
-      borderBottom: `1px solid ${colors.grey30}`,
+      display: "flex",
+      justifyContent: "space-between",
+      padding: "32px",
     },
     body: {
       flex: 1,
-      overflowY: "scroll",
+      overflowY: "auto",
     },
     transitionGroup: {
       display: "flex",
