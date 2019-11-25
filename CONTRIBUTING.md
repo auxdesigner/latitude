@@ -77,7 +77,7 @@ Note: your fork will not automatically sync with the main repository. Make sure 
 #### One-time setup
 
 1. Fork the repository - notice the "Fork" button at the top of the page
-2. Clone your personal version of the repo into you machine
+2. Clone your personal version of the repo into your machine
 ```bash
 git clone git@github.com:<YOUR GITHUB USERNAME>/latitude.git
 ```
